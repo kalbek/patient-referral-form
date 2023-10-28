@@ -109,7 +109,7 @@ function App() {
                   <div className="flex flex-col">
                     {/* visible part */}
                     <div className="flex h-[64px] w-[782px]">
-                      <p>{getBgClassNames(index)}</p>
+                     
                       <div
                         className={`h-full w-[40px] ${getBgClassNames(
                           index
