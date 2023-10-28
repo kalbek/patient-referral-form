@@ -2,3 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+input:required::before {
+  content: "*";
+  color: red;
+  margin-right: 5px;
+}
+ 
