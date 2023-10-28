@@ -6,13 +6,14 @@ function App() {
   const [patients, setPatient] = useState([
     {
       id: 0,
-      fname: "",
-      lname: "",
+      fname: "rose",
+      lname: "memer",
       dob: "",
       language: "",
       phone: "",
       email: "",
       address: "",
+      note: "",
       visible: true,
     },
     {
@@ -24,21 +25,11 @@ function App() {
       phone: "",
       email: "",
       address: "",
-      visible: true,
-    },
-    {
-      id: 2,
-      fname: "",
-      lname: "",
-      dob: "",
-      language: "",
-      phone: "",
-      email: "",
-      address: "",
+      note: "",
       visible: true,
     },
   ]);
-  const [newReferral, setNewReferral] = useState(true);
+  const [newReferral, setNewReferral] = useState();
 
   const handleVisibility = (index) => {
     patients.forEach((patient) => {
@@ -51,7 +42,7 @@ function App() {
   };
   const addPatient = () => {
     const newPatient = {
-      id: patient.length,
+      id: patients.length,
       fname: "",
       lname: "",
       dob: "",
@@ -59,10 +50,37 @@ function App() {
       phone: "",
       email: "",
       address: "",
+      note: "",
       visible: true,
     };
 
-    setPatient([...patient, newPatient]);
+    setPatient([...patients, newPatient]);
+  };
+  const deletePatient = (index) => {
+    const updatedPatients = patients.filter((patient) => patient.id !== index);
+    for (let i = 0; i < updatedPatients.length; i++) {
+      updatedPatients[i].id = i;
+    }
+    setPatient(updatedPatients);
+  };
+
+  const handleValues = (e, patientId, field) => {
+    const value = e.target.value;
+    setPatient((prevPatient) => {
+      return prevPatient.map((patient) => {
+        if (patient.id === patientId) {
+          return {
+            ...patient,
+            [field]: value,
+          };
+        }
+        return patient;
+      });
+    });
+  };
+
+  const getBgClassNames = (id) => {
+    return "bg-base_" + Number(id + 1);
   };
 
   return (
@@ -91,28 +109,37 @@ function App() {
                   <div className="flex flex-col">
                     {/* visible part */}
                     <div className="flex h-[64px] w-[782px]">
+                      <p>{getBgClassNames(index)}</p>
                       <div
-                        className={`h-full w-[40px] bg-base_1 text-white flex justify-center items-center rounded-tl-[4px] ${
-                          !newReferral && "rounded-bl-[4px]"
+                        className={`h-full w-[40px] ${getBgClassNames(
+                          index
+                        )} text-white flex justify-center items-center rounded-tl-[4px] ${
+                          !patient.visible && "rounded-bl-[4px]"
                         }   `}
                       >
-                        1
+                        {patient.id + 1}
                       </div>
 
-                      <div className="flex  justify-between items-center px-[16px] w-full bg-white rounded-e-[4px]">
-                        {newReferral ? (
-                          <p className="text-[20px] text-base_3">
+                      <div className="flex cursor-pointer justify-between items-center px-[16px] w-full bg-white rounded-e-[4px]">
+                        {patient.fname === "" ? (
+                          <p
+                            className="text-[20px] text-base_3 cursor-pointer"
+                            onClick={() => handleVisibility(index)}
+                          >
                             {" "}
                             New Referral
                           </p>
                         ) : (
-                          <p className="text-[20px] text-primary">Rosa Diaz</p>
+                          <p className="text-[20px] text-primary">
+                            {patient.fname} {patient.lname}
+                          </p>
                         )}
                         <section className="flex flex-initial items-center gap-[16px]">
                           <img
-                            className=" cursor-pointer"
                             src="/delete.svg"
                             alt="Mail Icon"
+                            onClick={() => deletePatient(index)}
+                            className=" p-2"
                           />
                           <section
                             className="cursor-pointer"
@@ -123,6 +150,7 @@ function App() {
                                 <img
                                   src="/expand_more.svg"
                                   alt="Down arrow Icon"
+                                  className=" p-2"
                                 />
                               </>
                             ) : (
@@ -130,6 +158,7 @@ function App() {
                                 <img
                                   src="/expand_less.svg"
                                   alt="Up arrow Icon"
+                                  className=" p-2"
                                 />
                               </>
                             )}
@@ -153,8 +182,13 @@ function App() {
                                   />
                                   <input
                                     type="text"
+                                    name="fname"
                                     placeholder="First Name"
                                     required
+                                    onChange={(e) =>
+                                      handleValues(e, patient.id, "fname")
+                                    }
+                                    value={patient.fname}
                                     className="pl-6 placeholder-base_3 border-base_3 text-base_3 gap-[8px] border-b w-[319px] focus:outline-none focus:border-b-2"
                                   />
                                 </div>
@@ -165,8 +199,13 @@ function App() {
                                     className="absolute"
                                   />
                                   <input
-                                    type="text"
+                                    type="date"
+                                    name="date"
                                     placeholder="Date of Birth"
+                                    onChange={(e) =>
+                                      handleValues(e, patient.id, "date")
+                                    }
+                                    value={patient.dob}
                                     required
                                     className="pl-6 placeholder-base_3 border-base_3 text-base_3 gap-[8px] border-b w-[319px] focus:outline-none focus:border-b-2"
                                   />
@@ -179,6 +218,11 @@ function App() {
                                   />
                                   <input
                                     type="text"
+                                    name="phone"
+                                    onChange={(e) =>
+                                      handleValues(e, patient.id, "phone")
+                                    }
+                                    value={patient.phone}
                                     placeholder="Phone"
                                     required
                                     className="pl-6 placeholder-base_3 border-base_3 text-base_3 gap-[8px] border-b w-[319px] focus:outline-none focus:border-b-2"
@@ -196,6 +240,11 @@ function App() {
                                   <input
                                     type="text"
                                     placeholder="Last Name"
+                                    name="lname"
+                                    onChange={(e) =>
+                                      handleValues(e, patient.id, "lname")
+                                    }
+                                    value={patient.lname}
                                     required
                                     className="pl-6 placeholder-base_3 border-base_3 text-base_3 gap-[8px] border-b w-[319px] focus:outline-none focus:border-b-2"
                                   />
@@ -209,6 +258,11 @@ function App() {
                                   <input
                                     type="text"
                                     placeholder="Contact Language"
+                                    name="language"
+                                    onChange={(e) =>
+                                      handleValues(e, patient.id, "language")
+                                    }
+                                    value={patient.language}
                                     required
                                     className="pl-6 placeholder-base_3 border-base_3 text-base_3 gap-[8px] border-b w-[319px] focus:outline-none focus:border-b-2"
                                   />
@@ -221,6 +275,11 @@ function App() {
                                   />
                                   <input
                                     type="text"
+                                    value={patient.email}
+                                    name="email"
+                                    onChange={(e) =>
+                                      handleValues(e, patient.id, "email")
+                                    }
                                     placeholder="Email"
                                     required
                                     className=" pl-6 placeholder-base_3 border-base_3 text-base_3 gap-[8px] border-b w-[319px] focus:outline-none focus:border-b-2"
@@ -231,11 +290,21 @@ function App() {
                             <input
                               type="text"
                               placeholder="Address"
+                              name="address"
+                              onChange={(e) =>
+                                handleValues(e, patient.id, "address")
+                              }
+                              value={patient.address}
                               required
                               className="w-full mt-[30px] placeholder-base_3 border-base_3 text-base_3 gap-[8px] border-b w- focus:outline-none focus:border-b-2"
                             />
                             <input
                               type="text"
+                              name="note"
+                              onChange={(e) =>
+                                handleValues(e, patient.id, "note")
+                              }
+                              value={patient.notes}
                               placeholder="Notes/Reason"
                               required
                               className="w-full pb-24px mt-[25px] placeholder-base_3 border-base_3 text-base_3 gap-[8px] border-b focus:outline-none focus:border-b-2"
