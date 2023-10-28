@@ -93,7 +93,10 @@ function App() {
             <h2 className="text-[27px]">Hayes Valley Health San Francisco</h2>
           </div>
         </div>
-        <div className="flex flex-col items-center gap-[28px]   pt-[230px]">
+        <form
+          className="flex flex-col items-center gap-[28px]   pt-[230px]"
+          action="submit"
+        >
           <div className="flex flex-col leading-[32px] justify-center items-center text-primary gap-[8px]">
             <p className="text-[24px]">Referral Patients</p>
             <p className="text-[20px]">
@@ -109,7 +112,6 @@ function App() {
                   <div className="flex flex-col">
                     {/* visible part */}
                     <div className="flex h-[64px] w-[782px]">
-                     
                       <div
                         className={`h-full w-[40px] ${getBgClassNames(
                           index
@@ -167,7 +169,7 @@ function App() {
                       </div>
                     </div>
                     {patient.visible ? (
-                      <form action="">
+                      <div>
                         <div className="flex h-[316px] w-[782px] bg-white justify-center pt-[32px] px-[56px]">
                           {/* two cols of input boxes */}
                           <div className="flex flex-col gap-[38.15">
@@ -311,7 +313,7 @@ function App() {
                             />
                           </div>
                         </div>
-                      </form>
+                      </div>
                     ) : (
                       <></>
                     )}
@@ -325,10 +327,14 @@ function App() {
           <p className="text-[14px] cursor-pointer" onClick={addPatient}>
             + ADD ANOTHER PATIENT
           </p>
-          <div className="rounded-full w-full  h-[48px] text-white mb-[1rem] flex justify-center items-center bg-base_5">
-            SEND REFERALS
-          </div>
-        </div>
+
+          <button
+            type="submit"
+            className="cursor-pointer rounded-full w-full  h-[48px] text-white mb-[1rem] flex justify-center items-center bg-base_5"
+          >
+            SEND REFERRALS
+          </button>
+        </form>
       </div>
       {/* main seciton */}
     </>
